@@ -46,3 +46,5 @@ try {
     throw e;
   }
 }
+
+export default calculateExercises;
