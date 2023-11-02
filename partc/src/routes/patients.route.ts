@@ -8,4 +8,9 @@ router.get("/", (_req, res) => {
   res.send(patientsService.getEntries());
 });
 
+router.post("/", (req, res) => {
+  const newPatientEntry = patientsService.addEntry(req.body);
+  res.json(newPatientEntry);
+});
+
 export default router;
