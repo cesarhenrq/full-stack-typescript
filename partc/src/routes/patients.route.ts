@@ -2,6 +2,10 @@ import express from "express";
 
 import patientsService from "../services/patients.service";
 
+import { toNewPatientEntry } from "../utils";
+
+import { BadRequestError } from "../errors";
+
 const router = express.Router();
 
 router.get("/", (_req, res) => {
@@ -9,8 +13,20 @@ router.get("/", (_req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const newPatientEntry = patientsService.addEntry(req.body);
-  res.json(newPatientEntry);
+  try {
+    const newPatientEntry = toNewPatientEntry(
+      req.body as Record<string, unknown>
+    );
+    const addedPatient = patientsService.addEntry(newPatientEntry);
+    res.json(addedPatient);
+  } catch (e: unknown) {
+    if (e instanceof BadRequestError) {
+      res.status(400).send(e.message);
+      return;
+    }
+
+    res.status(500).send("Unknown error");
+  }
 });
 
 export default router;

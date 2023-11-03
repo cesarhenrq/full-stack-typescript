@@ -21,11 +21,10 @@
       "error",
       { "argsIgnorePattern": "^_" }
     ],
-    "no-case-declarations": "off",
-    "@typescript-eslint/ignore-files": ["node_modules", "dist", "build"]
+    "no-case-declarations": "off"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./partc/tsconfig.json"
+    "project": "./tsconfig.json"
   }
 }
