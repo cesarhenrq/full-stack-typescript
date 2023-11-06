@@ -1,8 +1,5 @@
-interface ICoursePart {
-  name: string;
-  exerciseCount: number;
-}
+import CoursePart from "../../interfaces/course-part";
 
 export default interface IProps {
-  courseParts: Array<ICoursePart>;
+  courseParts: Array<CoursePart>;
 }
