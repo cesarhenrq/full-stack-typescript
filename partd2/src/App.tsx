@@ -1,5 +1,19 @@
+import { useState } from "react";
+
+import Entries from "./components/entries";
+import NewEntry from "./components/new-entry";
+
+import NonSensitiveDiaryEntry from "./interfaces/non-sensitive-diary-entry";
+
 function App() {
-  return <div>App</div>;
+  const [entries, setEntries] = useState<NonSensitiveDiaryEntry[]>([]);
+
+  return (
+    <div>
+      <NewEntry {...{ setEntries }} />
+      <Entries {...{ entries, setEntries }} />
+    </div>
+  );
 }
 
 export default App;
