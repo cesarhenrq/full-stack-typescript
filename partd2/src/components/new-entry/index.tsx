@@ -6,6 +6,8 @@ import diariesService from "../../services/diaries-service";
 
 import NonSensitiveDiaryEntry from "../../interfaces/non-sensitive-diary-entry";
 
+import { weathers, visibilities } from "../../helpers";
+
 interface NewEntryProps {
   setEntries: React.Dispatch<React.SetStateAction<NonSensitiveDiaryEntry[]>>;
 }
@@ -20,6 +22,15 @@ const NewEntry = ({ setEntries }: NewEntryProps) => {
     comment: "",
   });
 
+  const resetForm = () => {
+    setFormValues({
+      date: "",
+      visibility: "",
+      weather: "",
+      comment: "",
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
@@ -27,6 +38,8 @@ const NewEntry = ({ setEntries }: NewEntryProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    console.log("formValues", formValues);
 
     const newEntry = {
       date: formValues.date,
@@ -38,12 +51,7 @@ const NewEntry = ({ setEntries }: NewEntryProps) => {
     try {
       const response = await diariesService.create(newEntry);
       setEntries((prev) => [...prev, response.data]);
-      setFormValues({
-        date: "",
-        visibility: "",
-        weather: "",
-        comment: "",
-      });
+      resetForm();
     } catch (error) {
       if (isAxiosError(error)) {
         setError(error.response?.data || "Unknown Error");
@@ -71,25 +79,37 @@ const NewEntry = ({ setEntries }: NewEntryProps) => {
         />
       </label>
       <br />
-      <label>
+      <div>
         Visibility
-        <input
-          type='text'
-          name='visibility'
-          value={formValues.visibility}
-          onChange={handleChange}
-        />
-      </label>
+        {visibilities.map((visibility) => (
+          <label key={visibility}>
+            <input
+              type='radio'
+              name='visibility'
+              value={visibility}
+              onChange={handleChange}
+              checked={formValues.visibility === visibility}
+            />
+            {visibility}
+          </label>
+        ))}
+      </div>
       <br />
-      <label>
+      <div>
         Weather
-        <input
-          type='text'
-          name='weather'
-          value={formValues.weather}
-          onChange={handleChange}
-        />
-      </label>
+        {weathers.map((weather) => (
+          <label key={weather}>
+            <input
+              type='radio'
+              name='weather'
+              value={weather}
+              onChange={handleChange}
+              checked={formValues.weather === weather}
+            />
+            {weather}
+          </label>
+        ))}
+      </div>
       <br />
       <label>
         Comment
