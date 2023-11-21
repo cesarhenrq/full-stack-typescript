@@ -2,7 +2,7 @@ import { v1 as uuid } from "uuid";
 
 import patients from "../data/patients";
 
-import { PublicPatient, NewPatient, Patient } from "../types";
+import { PublicPatient, NewPatient, Patient, Entry, NewEntry } from "../types";
 
 import { genderMap } from "../mappers/gender.map";
 
@@ -42,8 +42,23 @@ const addEntry = (newPatientEntry: NewPatient): Patient => {
   return newPatient;
 };
 
+const addEntryToPatient = (patientId: string, entry: NewEntry): Entry => {
+  const patient = patients.find((patient) => patient.id === patientId);
+
+  if (!patient) {
+    throw new Error("Patient not found");
+  }
+
+  const newEntry = { ...entry, id: uuid() };
+
+  patient.entries.push(newEntry);
+
+  return newEntry;
+};
+
 export default {
   getEntries,
   getEntryById,
   addEntry,
+  addEntryToPatient,
 };
