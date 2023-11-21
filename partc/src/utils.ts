@@ -104,7 +104,7 @@ const isHealthCheckRating = (param: number): boolean => {
 };
 
 const parseHealthCheckRating = (rating: unknown): number => {
-  if (!rating || typeof rating !== "number" || !isHealthCheckRating(rating)) {
+  if (typeof rating !== "number" || !isHealthCheckRating(rating)) {
     throw new BadRequestError(
       "Incorrect or missing health check rating: " + rating
     );
