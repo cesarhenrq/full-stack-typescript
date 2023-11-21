@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import GenderIcon from "../GenderIcon";
+import BaseEntry from "../BaseEntry";
 
 import { Box, Typography } from "@mui/material";
 
@@ -57,24 +58,7 @@ const PatientPage = () => {
         </Typography>
         <Typography variant='h6'>Entries</Typography>
         {patient?.entries.map((entry) => (
-          <Box key={entry.id}>
-            <Typography>
-              <strong>{entry.date}</strong> {entry.description}
-            </Typography>
-            <ul>
-              {entry.diagnosisCodes?.map((code) => (
-                <li>
-                  <Typography key={code}>
-                    {code}{" "}
-                    {
-                      diagnoses.find((diagnosis) => diagnosis.code === code)
-                        ?.name
-                    }
-                  </Typography>
-                </li>
-              ))}
-            </ul>
-          </Box>
+          <BaseEntry key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))}
       </Box>
     </Box>
