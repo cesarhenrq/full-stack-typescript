@@ -2,7 +2,7 @@ import express from "express";
 
 import patientsService from "../services/patients.service";
 
-import { toNewPatientEntry } from "../utils";
+import { toNewEntry, toNewPatientEntry } from "../utils";
 
 import { BadRequestError } from "../errors";
 
@@ -29,6 +29,24 @@ router.post("/", (req, res) => {
     );
     const addedPatient = patientsService.addEntry(newPatientEntry);
     res.json(addedPatient);
+  } catch (e: unknown) {
+    if (e instanceof BadRequestError) {
+      res.status(400).send(e.message);
+      return;
+    }
+
+    res.status(500).send("Unknown error");
+  }
+});
+
+router.post("/:id/entries", (req, res) => {
+  try {
+    const newEntry = toNewEntry(req.body as Record<string, unknown>);
+    const addedEntry = patientsService.addEntryToPatient(
+      req.params.id,
+      newEntry
+    );
+    res.json(addedEntry);
   } catch (e: unknown) {
     if (e instanceof BadRequestError) {
       res.status(400).send(e.message);
