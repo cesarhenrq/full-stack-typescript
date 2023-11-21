@@ -46,10 +46,20 @@ const PatientPage = () => {
           <strong>Date of birth:</strong> {patient?.dateOfBirth}
         </Typography>
         <Typography variant='h6'>Entries</Typography>
-        <Typography>
-          <strong>2021-09-10</strong> Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quisquam, voluptatem.
-        </Typography>
+        {patient?.entries.map((entry) => (
+          <Box key={entry.id}>
+            <Typography>
+              <strong>{entry.date}</strong> {entry.description}
+            </Typography>
+            <ul>
+              {entry.diagnosisCodes?.map((code) => (
+                <li>
+                  <Typography key={code}>{code}</Typography>
+                </li>
+              ))}
+            </ul>
+          </Box>
+        ))}
       </Box>
     </Box>
   );
