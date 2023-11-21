@@ -6,12 +6,14 @@ import GenderIcon from "../GenderIcon";
 
 import { Box, Typography } from "@mui/material";
 
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 
 import patientService from "../../services/patients";
+import diagnosisService from "../../services/diagnosis";
 
 const PatientPage = () => {
   const [patient, setPatient] = React.useState<Patient | undefined>();
+  const [diagnoses, setDiagnoses] = React.useState<Diagnosis[]>([]);
 
   const { id } = useParams<{ id: string }>();
 
@@ -27,7 +29,15 @@ const PatientPage = () => {
     fetchPatient();
   }, [id]);
 
-  console.log(patient);
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const diagnoses = await diagnosisService.getAll();
+
+      setDiagnoses(diagnoses);
+    };
+
+    fetchDiagnoses();
+  }, []);
 
   return (
     <Box style={{ marginTop: "2em" }}>
@@ -54,7 +64,13 @@ const PatientPage = () => {
             <ul>
               {entry.diagnosisCodes?.map((code) => (
                 <li>
-                  <Typography key={code}>{code}</Typography>
+                  <Typography key={code}>
+                    {code}{" "}
+                    {
+                      diagnoses.find((diagnosis) => diagnosis.code === code)
+                        ?.name
+                    }
+                  </Typography>
                 </li>
               ))}
             </ul>
